@@ -2,201 +2,354 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Prediction Overlay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JOHIRUL WINGO PREDICTOR</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Orbitron:wght@700;900&family=Hind+Siliguri:wght@600;700&display=swap');
 
-        body, html {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
             width: 100%;
-            height: 100%;
-            background: #0d0d0d;
+            height: 100vh;
+            background: #11052c;
             overflow: hidden;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Hind Siliguri', sans-serif;
         }
 
-        .overlay-container {
+        /* মূল প্রেডিক্টর প্যানেল */
+        .predictor-card {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 320px;
-            background: radial-gradient(circle, #2a2008 0%, #0a0802 100%);
-            border: 3px solid #ffcc00;
-            border-radius: 25px;
-            padding: 15px;
-            box-shadow: 0 0 30px #ff9900, inset 0 0 15px #ffcc00;
-            box-sizing: border-box;
-            color: #fff;
-            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 360px;
+            background: linear-gradient(180deg, #180a3b 0%, #0d041d 100%);
+            border: 3px solid transparent;
+            border-image: linear-gradient(135deg, #ff007f, #00f0ff, #fffb00) 1;
+            border-radius: 28px;
+            padding: 16px;
+            box-shadow: 0 0 40px rgba(255, 0, 127, 0.5), 0 0 20px rgba(0, 240, 255, 0.3);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .header-section {
+        /* হেডার সেকশন */
+        .panel-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ffcc00;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            position: relative;
         }
 
-        .vip-badge {
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
-            color: #000;
-            font-size: 10px;
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
             font-weight: 900;
-            padding: 4px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 10px #ffcc00;
-        }
-
-        .status-indicators {
+            background: linear-gradient(90deg, #ff00c1, #00f0ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 193, 0.6);
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 6px;
         }
 
-        .status-dot {
+        /* লোগোর পাশের ডেকোরেটিভ পাতা বা উইং মটিফ */
+        .wing-ornament {
+            display: inline-flex;
+            gap: 2px;
+            color: #00f0ff;
+            font-size: 16px;
+            text-shadow: 0 0 8px #00f0ff;
+        }
+
+        .sub-tag {
             font-size: 10px;
             font-weight: 700;
+            color: #ff007f;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 1px solid #ff007f;
+            text-transform: uppercase;
+        }
+
+        .hide-badge {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 4px;
         }
 
-        .live-dot::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #00ff00;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff00;
-            animation: pulse 1s infinite;
-        }
-
-        .signal-display {
-            font-size: 56px;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 20px #ffcc00, 0 0 40px #ff6600, 0 0 60px #ff3300;
-            margin: 10px 0;
-            letter-spacing: 2px;
-            animation: glow 1.5s ease-in-out infinite alternate;
-        }
-
-        .period-section {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ffcc00;
-            border-radius: 15px;
-            padding: 8px;
-            margin-bottom: 15px;
-            display: inline-block;
-            width: 80%;
-        }
-
-        .period-text {
-            font-size: 12px;
-            color: #ffaa00;
-        }
-
-        .period-number {
-            font-size: 18px;
-            color: #ffffff;
-            margin-top: 2px;
-        }
-
-        .action-buttons {
+        /* গেম মোড ও পিরিয়ড বার */
+        .game-info-bar {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            align-items: center;
         }
 
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 12px;
-            font-family: inherit;
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
             font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .period-display {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .period-label {
+            font-size: 9px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .period-value {
+            font-family: 'Orbitron', sans-serif;
             font-size: 13px;
-            cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            border: none;
+            font-weight: 900;
+            color: #38bdf8;
         }
 
-        .btn-again {
-            background: linear-gradient(180deg, #333, #111);
-            color: #fff;
-            border: 1px solid #555;
+        /* প্রেডিকশন ডিসপ্লে এরিয়া */
+        .prediction-box {
+            background: radial-gradient(circle, #2e0854 0%, #0f0226 100%);
+            border: 2px solid #a855f7;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.5);
         }
 
-        .btn-hide {
-            background: linear-gradient(180deg, #4d4d4d, #222);
-            color: #fff;
-            border: 1px solid #666;
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            left: 14px;
+            background: #10b981;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #10b981;
         }
 
-        .join-container {
-            margin-top: 15px;
+        .prediction-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 52px;
+            font-weight: 900;
+            color: #d946ef;
+            text-shadow: 0 0 20px rgba(217, 70, 239, 0.8), 0 0 40px rgba(168, 85, 247, 0.6);
+            margin: 10px 0;
+            letter-spacing: 2px;
         }
 
-        .btn-join {
+        .win-overlay-text {
+            color: #22c55e !important;
+            text-shadow: 0 0 25px rgba(34, 197, 94, 0.9), 0 0 50px rgba(34, 197, 94, 0.5) !important;
+        }
+
+        /* পরিসীমা বা সাব-টেক্সট */
+        .range-info {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 20px;
+            margin-top: -5px;
+        }
+
+        .range-item {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 900;
+            font-size: 13px;
+            padding: 2px 14px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* পরবর্তী রাউন্ড কাউন্টডাউন */
+        .next-countdown {
+            background: linear-gradient(90deg, #1e1b4b, #312e81, #1e1b4b);
+            border: 1px solid #6366f1;
+            border-radius: 14px;
+            padding: 6px;
+            text-align: center;
+        }
+
+        .next-text {
+            font-size: 10px;
+            font-weight: 700;
+            color: #a5b4fc;
+            text-transform: uppercase;
+        }
+
+        .timer-box {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* পূর্ববর্তী রেজাল্ট সার্কেল ইতিহাস */
+        .results-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .circles-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .result-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 12px;
+            color: #ffffff;
+            box-shadow: 0 0 6px rgba(0,0,0,0.5);
+        }
+
+        /* কালার কোডেড সার্কেল (ছোট/বড় অনুযায়ী) */
+        .circle-small { background: linear-gradient(135deg, #06b6d4, #0369a1); border: 2px solid #22d3ee; }
+        .circle-big { background: linear-gradient(135deg, #f43f5e, #be123c); border: 2px solid #fb7185; }
+
+        /* জয়েন নাও বাটন */
+        .join-btn-container {
+            margin-top: 4px;
+        }
+
+        .join-link-btn {
+            display: block;
             width: 100%;
             padding: 14px;
-            background: linear-gradient(90deg, #ff3300, #ff9900, #ff3300);
-            background-size: 200% 100%;
-            color: #000;
-            font-weight: 900;
-            font-size: 16px;
+            background: linear-gradient(90deg, #ff007f, #7928ca);
+            border: none;
             border-radius: 20px;
-            box-shadow: 0 0 20px #ff6600;
-            animation: shine 3s linear infinite;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+            transition: transform 0.1s, box-shadow 0.2s;
+            cursor: pointer;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900; }
-            to { text-shadow: 0 0 25px #ffcc00, 0 0 50px #ff3300, 0 0 75px #ff0000; }
-        }
-
-        @keyframes shine {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .join-link-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
         }
     </style>
 </head>
 <body>
 
-    <div class="overlay-container">
-        <div class="header-section">
-            <span class="vip-badge">OWNER KAMRUL VIP</span>
-            <div class="status-indicators">
-                <span class="status-dot live-dot">LIVE</span>
-                <span class="status-dot" style="color: #00ff00;">MOD: ON</span>
+    <div class="predictor-card">
+        <!-- হেডার: জোহিরুল উইঙ্গো ও পাতা/উইং অর্নামেন্ট -->
+        <div class="panel-header">
+            <div class="brand-title">
+                <span class="wing-ornament">🌿✨</span> JOHIRUL <span class="wing-ornament">✨🌿</span>
+            </div>
+            <span class="sub-tag">WINGO</span>
+            <button class="hide-badge"><span>👁️</span> HIDE</button>
+        </div>
+
+        <!-- গেম মোড ও পিরিয়ড -->
+        <div class="game-info-bar">
+            <span class="game-title">30 SEC PREDICTOR V2</span>
+            <div class="period-display">
+                <span class="period-label">NO:</span>
+                <span class="period-value">20261102100052214</span>
             </div>
         </div>
 
-        <div class="signal-display">BIG</div>
-
-        <div class="period-section">
-            <div class="period-text">PERIOD</div>
-            <div class="period-number">0450</div>
+        <!-- প্রেডিকশন উইন্ডো (রঙিন বর্ডার ও গ্লোয়িং টেক্সট) -->
+        <div class="prediction-box">
+            <span class="status-badge">PREDICTED</span>
+            <!-- WIN! অ্যানিমেশন দেখানোর জন্য নিচের ক্লাসে 'win-overlay-text' যুক্ত করবি -->
+            <div class="prediction-text">SMALL</div>
+            
+            <div class="range-info">
+                <div class="range-item" style="border: 2px solid #00f0ff;">SMALL 0-4</div>
+                <div class="range-item" style="border: 2px solid #ff00c1;">BIG 5-9</div>
+            </div>
         </div>
 
-        <div class="action-buttons">
-            <button class="btn btn-again">↻ AGAIN</button>
-            <button class="btn btn-hide">👁 HIDE</button>
+        <!-- নেক্সট রাউন্ড কাউন্টডাউন -->
+        <div class="next-countdown">
+            <div class="next-text">NEXT IN</div>
+            <div class="timer-box">
+                <span>⏱️</span> <span>00 : 23</span>
+            </div>
         </div>
 
-        <div class="join-container">
-            <button class="btn btn-join">» JOIN NOW «</button>
+        <!-- সাম্প্রতিক রেজাল্ট হিস্ট্রি সার্কেল -->
+        <div class="results-section">
+            <div class="results-title">RECENT LATEST RESULTS</div>
+            <div class="circles-row">
+                <div class="result-circle circle-small">8</div>
+                <div class="result-circle circle-big">4</div>
+                <div class="result-circle circle-big">3</div>
+                <div class="result-circle circle-small">2</div>
+                <div class="result-circle circle-big">9</div>
+                <div class="result-circle circle-big">6</div>
+                <div class="result-circle circle-big">0</div>
+                <div class="result-circle circle-small">8</div>
+                <div class="result-circle circle-big">7</div>
+            </div>
+        </div>
+
+        <!-- জয়েন নাও অ্যাকশন বাটন -->
+        <div class="join-btn-container">
+            <a href="https://hgnice0.com/#/register?invitationCode=376851951983" class="join-link-btn">PLAY SMARTER</a>
         </div>
     </div>
 
