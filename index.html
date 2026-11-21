@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Prediction Overlay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d0d0d;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            background: radial-gradient(circle, #2a2008 0%, #0a0802 100%);
+            border: 3px solid #ffcc00;
+            border-radius: 25px;
+            padding: 15px;
+            box-shadow: 0 0 30px #ff9900, inset 0 0 15px #ffcc00;
+            box-sizing: border-box;
+            color: #fff;
+            text-align: center;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .vip-badge {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: #000;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-dot {
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .live-dot::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ff00;
+            animation: pulse 1s infinite;
+        }
+
+        .signal-display {
+            font-size: 56px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 20px #ffcc00, 0 0 40px #ff6600, 0 0 60px #ff3300;
+            margin: 10px 0;
+            letter-spacing: 2px;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .period-section {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #ffcc00;
+            border-radius: 15px;
+            padding: 8px;
+            margin-bottom: 15px;
+            display: inline-block;
+            width: 80%;
+        }
+
+        .period-text {
+            font-size: 12px;
+            color: #ffaa00;
+        }
+
+        .period-number {
+            font-size: 18px;
+            color: #ffffff;
+            margin-top: 2px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            border: none;
+        }
+
+        .btn-again {
+            background: linear-gradient(180deg, #333, #111);
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .btn-hide {
+            background: linear-gradient(180deg, #4d4d4d, #222);
+            color: #fff;
+            border: 1px solid #666;
+        }
+
+        .join-container {
+            margin-top: 15px;
+        }
+
+        .btn-join {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #ff3300, #ff9900, #ff3300);
+            background-size: 200% 100%;
+            color: #000;
+            font-weight: 900;
+            font-size: 16px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px #ff6600;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900; }
+            to { text-shadow: 0 0 25px #ffcc00, 0 0 50px #ff3300, 0 0 75px #ff0000; }
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay-container">
+        <div class="header-section">
+            <span class="vip-badge">OWNER KAMRUL VIP</span>
+            <div class="status-indicators">
+                <span class="status-dot live-dot">LIVE</span>
+                <span class="status-dot" style="color: #00ff00;">MOD: ON</span>
+            </div>
+        </div>
+
+        <div class="signal-display">BIG</div>
+
+        <div class="period-section">
+            <div class="period-text">PERIOD</div>
+            <div class="period-number">0450</div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-again">↻ AGAIN</button>
+            <button class="btn btn-hide">👁 HIDE</button>
+        </div>
+
+        <div class="join-container">
+            <button class="btn btn-join">» JOIN NOW «</button>
+        </div>
+    </div>
+
+</body>
+</html>
